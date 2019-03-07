@@ -1,0 +1,11 @@
+ru:
+  field_already_read: Просмотрено
+  field_already_read_date: Дата просмотра
+  field_without_reads_reset: Не сбрасывать прочитанность
+
+  label_already_read: Прочитано
+  label_already_read_read: Прочитано
+  label_already_read_unread: Не прочинано
+
+  label_mark_read: "Отметить как прочитанное"
+  label_mark_unread: "Отметить как непрочитанное"

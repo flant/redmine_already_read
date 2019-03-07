@@ -1,4 +1,5 @@
 require 'redmine'
+require 'already_read/already_read_hooks'
 require 'already_read/issue_patch'
 require 'already_read/issues_controller_patch'
 require 'already_read/user_patch'
@@ -12,6 +13,10 @@ Redmine::Plugin.register :redmine_already_read do
   url 'https://github.com/ameya86/redmine_already_read'
   author_url 'http://blog.livedoor.jp/ameya86/'
 
+  unless Redmine::AccessControl.permission(:view_issues).actions.include?('issues/bulk_set_read')
+    Redmine::AccessControl.permission(:view_issues).actions << 'issues/bulk_set_read'
+  end
+
   # "活動"にチケットイベントとして登録
-  activity_provider :issues, :class_name => 'AlreadyRead'
+  activity_provider :issues, class_name: 'AlreadyRead'
 end

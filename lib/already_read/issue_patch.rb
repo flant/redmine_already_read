@@ -6,13 +6,16 @@ module AlreadyReadIssuePatch
 
     base.class_eval do
       alias_method_chain :css_classes, :already_read
+      attr_accessor :without_reads_reset
+
+      safe_attributes 'without_reads_reset'
     end
   end
 
   module InstanceMethods # obj.method
     # チケットのclassに既読／未読も追加する
-    def css_classes_with_already_read
-      s = css_classes_without_already_read
+    def css_classes_with_already_read(user=User.current)
+      s = css_classes_without_already_read(user)
       s << ((self.already_read?)? ' read' : ' unread')
       return s
     end
@@ -20,9 +23,9 @@ module AlreadyReadIssuePatch
 end
 
 class Issue < ActiveRecord::Base
-  has_many :already_reads, lambda {includes(:user); order(:created_on)}
-  has_many :already_read_users, :through => :already_reads, :source => :user
-  after_update :reset_already_read
+  has_many :already_reads, lambda { includes(:user); order(:created_on) }
+  has_many :already_read_users, through: :already_reads, source: :user
+  after_update :reset_already_read, unless: ->(i){ i.without_reads_reset == '1' }
 
   # 状態を文字で返す
   def already_read(user = User.current)
@@ -31,7 +34,7 @@ class Issue < ActiveRecord::Base
 
   # 既読ならtrueを返す
   def already_read?(user = User.current)
-   return !user.anonymous? && user.already_read_issue_ids.include?(self.id)
+   return !user.anonymous? && self.already_read_users.include?(user)
   end
 
   # チケットを読んだ日
@@ -43,7 +46,7 @@ class Issue < ActiveRecord::Base
   private
   # 既読フラグはチケットを更新したらリセットする
   def reset_already_read
-    AlreadyRead.destroy_all(:issue_id => self.id)
+    AlreadyRead.destroy_all(issue_id: self.id)
   end
 end
 

@@ -1,0 +1,13 @@
+.icon-read { background-image: url(../images/bullet-black-icon.png); }
+.icon-unread { background-image: url(../images/bullet-green-icon.png); }
+
+table td.subject { padding-left: 16px; }
+
+table tr.unread td.subject {
+    font-weight: bold;
+    background: transparent url(../images/bullet-green-icon.png) no-repeat center left;
+}
+
+table tr.read td.subject {
+    background: transparent url(../images/bullet-black-icon.png) no-repeat center left;
+}
