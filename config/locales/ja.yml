@@ -1,7 +1,11 @@
 ja:
   field_already_read: 既読
   field_already_read_date: 読んだ日時
+  field_without_reads_reset: 既読をリセットしない
 
   label_already_read: 既読
   label_already_read_read: 既読
   label_already_read_unread: 未読
+
+  label_mark_read: "既読にする"
+  label_mark_unread: "未読にする"
